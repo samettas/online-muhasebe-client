@@ -5,11 +5,13 @@ import { SectionComponent } from 'src/app/common/components/blank/section/sectio
 import { NavModel } from 'src/app/common/components/blank/models/navs.model';
 import { UcafService } from './services/ucaf.service';
 import { UcafModel } from './models/ucaf.model';
+import { UcafPipe } from './pipes/ucaf.pipe';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-ucafs',
   standalone: true,
-  imports: [CommonModule, BlankComponent, SectionComponent],
+  imports: [CommonModule, BlankComponent, SectionComponent, UcafPipe, FormsModule],
   templateUrl: './ucafs.component.html',
   styleUrls: ['./ucafs.component.css'],
 })
@@ -28,6 +30,8 @@ export class UcafsComponent implements OnInit{
   ];
 
   ucafs: UcafModel[] = [];
+
+  filterText:string = "";
 
   constructor(
     private _ucaf: UcafService

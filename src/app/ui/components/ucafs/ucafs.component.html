@@ -1,6 +1,12 @@
 <app-blank title="Hesap Planı" [navs]="navs">
     <app-section sectionTitle="Hesap Planı Listesi">
-        <table class="table table-bordered">
+
+        <div class="form-group float-right col-md-3">
+            <input type="search" placeholder="Aranacak değer..." [(ngModel)]="filterText" class="form-control search">
+        </div>
+
+        <div class="form-group">
+            <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Code</th>
@@ -11,7 +17,7 @@
             </thead>
 
             <tbody>
-                <tr *ngFor="let ucaf of ucafs let index = index">
+                <tr *ngFor="let ucaf of ucafs | ucafPipe: filterText let index = index">
                     <td [innerText]="ucaf.code"></td>
                     <td [innerText]="ucaf.type"></td>
                     <td [innerText]="ucaf.name"></td>
@@ -26,5 +32,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
+        
     </app-section>
 </app-blank>
