@@ -9,7 +9,7 @@ import { CryptoService } from 'src/app/common/services/crypto.service';
 })
 export class AuthService {
 
-  api : string = "https://localhost:7213/api/Auth/Login";
+  api : string = "Auth/Login";
   constructor(
     private _http: GenericHttpService,
     private _router: Router,
