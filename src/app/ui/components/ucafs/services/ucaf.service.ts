@@ -5,6 +5,7 @@ import { LoginResponseModel } from '../../auth/models/login-response.model';
 import { CryptoService } from 'src/app/common/services/crypto.service';
 import { ResponseModel } from 'src/app/common/models/response.model';
 import { MessageResponseModel } from 'src/app/common/models/message-response.model';
+import { RemoveByIdUcafModel } from '../models/remove-by-id-ucaf.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,10 @@ export class UcafService {
   add(model:UcafModel, callBack: (res: MessageResponseModel)=> void) {
     model.companyId = this.loginResponse.company.companyId;
     this._http.post<MessageResponseModel>("UCAFs/CreateUCAF", model, (res)=> callBack(res));
+  }
+
+  removeById(model:RemoveByIdUcafModel, callBack:(res:MessageResponseModel)=> void) {
+    model.companyId = this.loginResponse.company.companyId;
+    this._http.post<MessageResponseModel>("UCAFs/RemoveByIdUCAF", model, (res)=> callBack(res));
   }
 }

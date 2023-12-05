@@ -10,6 +10,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { ValidInputDirective } from 'src/app/common/directives/valid-input.directive';
 import { LoadingButtonComponent } from 'src/app/common/components/loading-button/loading-button.component';
 import { ToastrService, ToastrType } from 'src/app/common/services/toastr.service';
+import { RemoveByIdUcafModel } from './models/remove-by-id-ucaf.model';
 
 @Component({
   selector: 'app-ucafs',
@@ -76,6 +77,18 @@ export class UcafsComponent implements OnInit{
         this.isLoading = false;
         this._toastr.toast(ToastrType.Succes, "Başarılı!",res.message);
       });
+    }
+  }
+
+  removeById(id: string) {
+    var result = confirm("Silme işlemini yapmak istiyor musunuz ?");
+    if(result) {
+      let model = new RemoveByIdUcafModel();
+      model.id = id;
+
+      this._ucaf.removeById(model, res=>{
+        this._toastr.toast(ToastrType.Info,"Başarılı!" , res.message);
+      })
     }
   }
 }
