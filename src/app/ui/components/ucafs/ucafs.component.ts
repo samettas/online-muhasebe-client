@@ -11,6 +11,7 @@ import { ValidInputDirective } from 'src/app/common/directives/valid-input.direc
 import { LoadingButtonComponent } from 'src/app/common/components/loading-button/loading-button.component';
 import { ToastrService, ToastrType } from 'src/app/common/services/toastr.service';
 import { RemoveByIdUcafModel } from './models/remove-by-id-ucaf.model';
+import { SwalService } from 'src/app/common/services/swal.service';
 
 @Component({
   selector: 'app-ucafs',
@@ -47,7 +48,8 @@ export class UcafsComponent implements OnInit{
 
   constructor(
     private _ucaf: UcafService,
-    private _toastr: ToastrService
+    private _toastr: ToastrService,
+    private _swal: SwalService
   ) {}
 
   ngOnInit(): void {
@@ -86,15 +88,15 @@ export class UcafsComponent implements OnInit{
   }
 
   removeById(id: string) {
-    var result = confirm("Silme işlemini yapmak istiyor musunuz ?");
-    if(result) {
+    this._swal.callSwal("Sil", "Sil ?", "Hesap planı kodunu silmek istiyor musunuz ?", ()=> {
       let model = new RemoveByIdUcafModel();
       model.id = id;
 
       this._ucaf.removeById(model, res=>{
+        this.getAll();
         this._toastr.toast(ToastrType.Info,"Başarılı!" , res.message);
-      })
-    }
+      });
+    });
   }
 
   setTrClass(type: string) {
