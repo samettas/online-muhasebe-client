@@ -32,6 +32,11 @@ export class UcafService {
     this._http.post<MessageResponseModel>("UCAFs/CreateUCAF", model, (res)=> callBack(res));
   }
 
+  update(model:UcafModel, callBack: (res: MessageResponseModel)=> void) {
+    model.companyId = this.loginResponse.company.companyId;
+    this._http.post<MessageResponseModel>("UCAFs/UpdateUCAF", model, (res)=> callBack(res));
+  }
+
   removeById(model:RemoveByIdUcafModel, callBack:(res:MessageResponseModel)=> void) {
     model.companyId = this.loginResponse.company.companyId;
     this._http.post<MessageResponseModel>("UCAFs/RemoveByIdUCAF", model, (res)=> callBack(res));

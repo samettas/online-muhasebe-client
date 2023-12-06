@@ -41,9 +41,13 @@ export class UcafsComponent implements OnInit{
     },
   ];
   ucafs: UcafModel[] = [];
+  updateModel:UcafModel = new UcafModel();
   filterText:string = "";
-  isAddForm: boolean = false;
   ucafType: string = "M";
+
+  isAddForm: boolean = false;
+  isUpdateForm: boolean = false;
+
   isLoading: boolean = false;
 
   constructor(
@@ -83,8 +87,28 @@ export class UcafsComponent implements OnInit{
     }
   }
 
+  get(model:UcafModel) {
+    this.updateModel = {...model};
+    this.isUpdateForm = true;
+    this.isAddForm = false;
+  }
+
+  update(form:NgForm) {
+    if(form.valid) {
+      this.isLoading = true;
+
+      this._ucaf.update(this.updateModel, (res)=> {
+        this.cancel();
+        this.getAll();
+        this.isLoading = false;
+        this._toastr.toast(ToastrType.Info, "Başarılı!",res.message);
+      });
+    }
+  }
+
   cancel() {
     this.isAddForm = false;
+    this.isUpdateForm = false;
   }
 
   removeById(id: string) {
