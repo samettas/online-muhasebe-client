@@ -46,7 +46,6 @@
           <label>İşlemler</label>
           <app-loading-button
             [form]="addForm"
-            [isloading]="isLoading"
             btnName="Kaydet"
             btnLoadingDescription="Kaydediliyor..."
           ></app-loading-button>
@@ -109,7 +108,6 @@
           <app-loading-button
             [form]="updateForm"
             btnClass="btn btn-outline-info w-100"
-            [isloading]="isLoading"
             btnName="Güncelle"
             btnLoadingDescription="Güncelleniyor..."
             btnLoadingClass="btn btn-outline-info w-100"

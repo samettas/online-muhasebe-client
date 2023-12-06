@@ -13,7 +13,7 @@ export class AuthService {
   constructor(
     private _http: GenericHttpService,
     private _router: Router,
-    private _crypto: CryptoService
+    private _crypto: CryptoService,
   ) { }
 
   login(model: any){
