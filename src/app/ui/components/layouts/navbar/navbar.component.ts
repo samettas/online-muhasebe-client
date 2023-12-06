@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/services/auth.service';
+import { LoginResponseModel } from '../../auth/models/login-response.model';
 
 @Component({
   selector: 'app-navbar',
@@ -11,6 +12,8 @@ import { AuthService } from '../../auth/services/auth.service';
 })
 export class NavbarComponent {
 
+  @Input() loginResponse: LoginResponseModel = new LoginResponseModel();
+  
   constructor(
     private _auth: AuthService
   ){}
