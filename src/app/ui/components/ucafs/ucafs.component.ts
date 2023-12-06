@@ -71,13 +71,18 @@ export class UcafsComponent implements OnInit{
       model.name = form.controls["name"].value;
 
       this._ucaf.add(model, (res)=> {
-        form.reset();
+        form.controls["code"].setValue("");
+        form.controls["name"].setValue("");
         this.ucafType = "M";
         this.getAll();
         this.isLoading = false;
         this._toastr.toast(ToastrType.Succes, "Başarılı!",res.message);
       });
     }
+  }
+
+  cancel() {
+    this.isAddForm = false;
   }
 
   removeById(id: string) {
@@ -90,5 +95,14 @@ export class UcafsComponent implements OnInit{
         this._toastr.toast(ToastrType.Info,"Başarılı!" , res.message);
       })
     }
+  }
+
+  setTrClass(type: string) {
+    if(type == "A")
+      return "text-danger";
+    else if(type == "G")
+      return "text-primary";
+    else
+      return "";
   }
 }
