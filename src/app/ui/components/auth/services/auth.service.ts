@@ -28,4 +28,5 @@ export class AuthService {
     localStorage.removeItem("accessToken");
     this._router.navigateByUrl("/login");
   }
+
 }

@@ -6,6 +6,7 @@ import { CryptoService } from 'src/app/common/services/crypto.service';
 import { ResponseModel } from 'src/app/common/models/response.model';
 import { MessageResponseModel } from 'src/app/common/models/message-response.model';
 import { RemoveByIdUcafModel } from '../models/remove-by-id-ucaf.model';
+import { LoginResponseService } from 'src/app/common/services/login-response.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,10 @@ export class UcafService {
   loginResponse: LoginResponseModel = new LoginResponseModel();
 
   constructor(
-    private _crypto: CryptoService,
-    private _http: GenericHttpService
+    private _http: GenericHttpService,
+    private _loginResponse: LoginResponseService
   ) {
-    let loginResponseString = _crypto.decrypto(localStorage.getItem("accessToken").toString())
-    this.loginResponse = JSON.parse(loginResponseString);
+      this.loginResponse = this._loginResponse.getLoginResponseModel();
   }
 
   getAll(callBack: (res:ResponseModel<UcafModel[]>)=> void) {
