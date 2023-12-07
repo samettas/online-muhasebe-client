@@ -12,6 +12,10 @@ import { LoadingButtonComponent } from 'src/app/common/components/loading-button
 import { ToastrService, ToastrType } from 'src/app/common/services/toastr.service';
 import { RemoveByIdUcafModel } from './models/remove-by-id-ucaf.model';
 import { SwalService } from 'src/app/common/services/swal.service';
+import { ExcelLoadingButtonComponent } from 'src/app/common/components/excel-loading-button/excel-loading-button.component';
+import { ReportRequestModel } from 'src/app/common/models/report-request.model';
+import { ReportService } from '../reports/services/report.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ucafs',
@@ -23,7 +27,8 @@ import { SwalService } from 'src/app/common/services/swal.service';
     FormsModule, 
     ValidInputDirective, 
     FormsModule,
-  LoadingButtonComponent],
+    LoadingButtonComponent,
+    ExcelLoadingButtonComponent],
   templateUrl: './ucafs.component.html',
   styleUrls: ['./ucafs.component.css'],
 })
@@ -53,7 +58,9 @@ export class UcafsComponent implements OnInit{
   constructor(
     private _ucaf: UcafService,
     private _toastr: ToastrService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private _report: ReportService,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -126,5 +133,15 @@ export class UcafsComponent implements OnInit{
       return "text-primary";
     else
       return "";
+  }
+
+  exportExcel() {
+      let model: ReportRequestModel = new ReportRequestModel();
+      model.type = "UCAF";
+
+      this._report.request(model, (res)=> {
+        this._toastr.toast(ToastrType.Info, res.message);
+        this._router.navigateByUrl("/reports");
+      });
   }
 }

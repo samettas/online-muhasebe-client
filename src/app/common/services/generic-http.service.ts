@@ -131,6 +131,8 @@ export class GenericHttpService {
               error:(err)=>{
                 this._error.errorHandler(err);
                 console.log(err);
+                localStorage.removeItem("accessToken");
+                this._router.navigateByUrl("/login");
               }
             });
         } else {
