@@ -137,7 +137,7 @@ export class UcafsComponent implements OnInit{
 
   exportExcel() {
       let model: ReportRequestModel = new ReportRequestModel();
-      model.type = "UCAF";
+      model.name = "Hesap Planı";
 
       this._report.request(model, (res)=> {
         this._toastr.toast(ToastrType.Info, res.message);

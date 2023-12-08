@@ -22,57 +22,36 @@ export class GenericHttpService {
     private _http: HttpClient,
     private _error: ErrorService,
     private _crypto: CryptoService,
-    private _loginResponse: LoginResponseService,
-    private store: Store<{loading: boolean}>,
-    private _router: Router
-  ) {
-    this.store.select("loading").subscribe(res=> {
+    private _router: Router,
+    private _loginResponse: LoginResponseService,  
+    private store: Store<{loading: boolean}>  
+  ) { 
+    this.store.select("loading").subscribe(res=>{
       this.isLoading = res;
     })
   }
-
-  get<T>(
-    api: string,
-    callBack: (res: T) => void,
-    authorize: boolean = true,
-    diffApi: boolean = false
-  ) {
+  get<T>(api: string, callBack: (res: T) => void, authorize: boolean = true, diffApi: boolean = false) {
     this.getToken();
     if(!this.isLoading)
-      this.store.dispatch(changeLoading());
-    this._http
-      .get<T>(`${this.setApi(diffApi, api)}`, this.setOptions(authorize))
-      .subscribe({
-        next: (res) => {
-          if(this.isLoading)
-            this.store.dispatch(changeLoading()); 
-          callBack(res)
-        },
-        error: (err: HttpErrorResponse) => {
-          if(this.isLoading)
-            this.store.dispatch(changeLoading());
-          this._error.errorHandler(err);
-        }
-      });
+      this.store.dispatch(changeLoading()); 
+    this._http.get<T>(`${this.setApi(diffApi, api)}`, this.setOptions(authorize)).subscribe({
+      next: (res) => {
+        if(this.isLoading)
+          this.store.dispatch(changeLoading()); 
+        callBack(res)
+      },
+      error: (err: HttpErrorResponse) => {
+        if(this.isLoading)
+          this.store.dispatch(changeLoading());
+        this._error.errorHandler(err);
+      }
+    });
   }
-
-  post<T>(
-    api: string,
-    model: any,
-    callBack: (res: T) => void,
-    authorize: boolean = true,
-    diffApi: boolean = false
-  ) {
+  post<T>(api: string, model: any, callBack: (res: T) => void, authorize: boolean = true, diffApi: boolean = false) {
     this.getToken();
     if(!this.isLoading)
-      this.store.dispatch(changeLoading());
-    this._http
-      .post<T>(
-        `${this.setApi(diffApi, api)}`,
-        model,
-        this.setOptions(authorize)
-      )
-      .subscribe({
+      this.store.dispatch(changeLoading()); 
+    this._http.post<T>(`${this.setApi(diffApi, api)}`, model, this.setOptions(authorize)).subscribe({
       next: (res) => {
         if(this.isLoading)
           this.store.dispatch(changeLoading()); 
@@ -83,64 +62,59 @@ export class GenericHttpService {
           this.store.dispatch(changeLoading());        
         this._error.errorHandler(err);
       }
-      });
-  }
-
+    });
+  }  
   setApi(diffApi: boolean, api: string) {
-    if (diffApi) return api;
+    if (diffApi)
+      return api;
     return this.apiUrl + api;
   }
-
   setOptions(authorize: boolean) {
     if (authorize)
-      return { headers: { Authorization: `Bearer ${this.token}` } };
-    return {};
+      return { headers: { "Authorization": `Bearer ${this.token}` } }
+    return {}
   }
 
-  getToken() {
-    let accessToken = localStorage.getItem("accessToken")
+  getToken() {    
+    let accessToken = localStorage.getItem("accessToken");
     if(accessToken == undefined || accessToken == null){
       return;
     }
     this.loginResponse = this._loginResponse.getLoginResponseModel();
     this.token = this.loginResponse.token.token;
-    if (this.token != '' && this.token != undefined && this.token != null) {
+    if (this.token != "" && this.token != undefined && this.token != null) {
       var decoded: any = jwt_decode(this.token);
       let time = new Date().getTime() / 1000;
-      let refreshToken =
-        new Date(this.loginResponse.token.refreshTokenExpires).getTime() / 1000;
+      let refreshToken = new Date(this.loginResponse.token.refreshTokenExpires).getTime() / 1000;
       if (time > decoded.exp) {
-        if (refreshToken >= time) {
-          let model: {
-            userId: string;
-            refreshToken: string;
-            companyId: string;
-          } = {
-            userId: this.loginResponse.userId,
-            refreshToken: this.loginResponse.token.refreshToken,
-            companyId: this.loginResponse.company.companyId,
-          };
-
-            this._http.post<LoginResponseModel>(this.apiUrl + this.refreshTokenApiUrl ,model).subscribe({
-              next: (res) =>{
-                let cryptoValue = this._crypto.encrypto(JSON.stringify(res));
-                localStorage.setItem("accessToken", cryptoValue);
-                this.loginResponse = res;
-                this.token = this.loginResponse.token.token;
-              },
-              error:(err)=>{
-                this._error.errorHandler(err);
-                console.log(err);
-                localStorage.removeItem("accessToken");
-                this._router.navigateByUrl("/login");
-              }
-            });
-        } else {
-          localStorage.removeItem("accessToken");
-          this._router.navigateByUrl("/login");
+        if(refreshToken >= time){
+          let model: {userId: string, refreshToken: string, companyId: string} = 
+          {
+            userId: this.loginResponse.userId, 
+            refreshToken: this.loginResponse.token.refreshToken, 
+            companyId: this.loginResponse.company.companyId
+          };    
+          
+          this._http.post<LoginResponseModel>(this.apiUrl + this.refreshTokenApiUrl,model).subscribe({
+            next: (res)=>{
+              let cryptoValue = this._crypto.encrypto(JSON.stringify(res));
+              localStorage.setItem("accessToken",cryptoValue);
+              this.loginResponse = res;
+              this.token = this.loginResponse.token.token;
+            },
+            error: (err)=>{
+              this._error.errorHandler(err);
+              console.log(err);
+              localStorage.removeItem("accessToken");
+              this._router.navigateByUrl("/login")
+            }
+          });          
         }
-      }
-      console.log(decoded);
+        else{
+          localStorage.removeItem("accessToken");
+          this._router.navigateByUrl("/login")
+        }
+      }      
     }
   }
 }

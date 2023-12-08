@@ -10,14 +10,13 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./excel-loading-button.component.css']
 })
 export class ExcelLoadingButtonComponent {
-  isloading: boolean = false;
+  isloading: boolean = false; //state
 
   constructor(
-    private _store: Store<{loading: boolean}>
+    private store: Store<{loading: boolean}>
   ){
-      this._store.select("loading").subscribe(res=> {
-        this.isloading = res;
-      });
+    this.store.select("loading").subscribe(res=>{
+      this.isloading = res;
+    });
   }
-
 }

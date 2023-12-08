@@ -1,4 +1,4 @@
 export class ReportRequestModel{
-    type: string = "";
+    name: string = "";
     companyId: string = "";
 }
