@@ -6,6 +6,7 @@ import { ResponseModel } from 'src/app/common/models/response.model';
 import { GenericHttpService } from 'src/app/common/services/generic-http.service';
 import { LoginResponseService } from 'src/app/common/services/login-response.service';
 import { ReportModel } from '../models/report.model';
+import { PaginationResultModel } from 'src/app/common/models/pagination-result.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +18,12 @@ export class ReportService {
     private _loginResponse: LoginResponseService
   ) { }
 
-  getAll(callBack: (res: ReportModel[])=> void){
+  getAll(pageNumber: number = 1, pageSize: number = 5, callBack: (res: PaginationResultModel<ReportModel[]>)=> void){
     let model: RequestModel = new RequestModel();
     model.companyId = this._loginResponse.getLoginResponseModel().company.companyId;
-    this._http.post<ResponseModel<ReportModel[]>>("Reports/GetAll",model, res=>{
+    model.pageNumber = pageNumber;
+    model.pageSize = pageSize;
+    this._http.post<ResponseModel<PaginationResultModel<ReportModel[]>>>("Reports/GetAll",model, res=>{
       callBack(res.data);
     });
   }
