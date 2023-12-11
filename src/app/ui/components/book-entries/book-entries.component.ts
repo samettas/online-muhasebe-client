@@ -14,6 +14,7 @@ import { ValidInputDirective } from 'src/app/common/directives/valid-input.direc
 import { LoadingButtonComponent } from 'src/app/common/components/loading-button/loading-button.component';
 import { CreateBookEntryModel } from './models/create-book-entry.model';
 import { ToastrService, ToastrType } from 'src/app/common/services/toastr.service';
+import { LoginResponseService } from 'src/app/common/services/login-response.service';
 
 @Component({
   selector: 'app-book-entries',
@@ -53,13 +54,14 @@ export class BookEntriesComponent implements OnInit {
   constructor(
     private _bookEntry: BookEntryService,
     private _date: DatePipe,
-    private _toastr: ToastrService
+    private _toastr: ToastrService,
+    private _loginResponse: LoginResponseService
   ){
     this.dateInput = _date.transform(new Date(),"yyyy-MM-dd");
   }
 
   ngOnInit(): void {
-
+    this.getAll();
   }
 
   getAll(pageNumber: number = 1) {
@@ -84,6 +86,12 @@ export class BookEntriesComponent implements OnInit {
       model.type = form.controls["type"].value;
       model.description = form.controls["description"].value;
 
+      let year = this.dateInput.split("-")[0];
+      if(this._loginResponse.getLoginResponseModel().year != +year) {
+        this._toastr.toast(ToastrType.Error, "Sadece mevcut yıla işlem yapılabilir!");
+        return;
+      }
+
       this._bookEntry.create(model, (res)=> {
         this._toastr.toast(ToastrType.Success, res.message, "");
         form.controls["description"].setValue("");
@@ -94,6 +102,13 @@ export class BookEntriesComponent implements OnInit {
         element.click();
       });
     }
+  }
+
+  changeBlankTrClass(model: BookEntryModel) {
+    if(model.debit + model.credit == 0)
+      return "text-danger";
+
+      return ""
   }
 
   exportExcel() {

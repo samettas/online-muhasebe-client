@@ -19,6 +19,7 @@ export class BookEntryService {
 
   getAll(model: RequestModel, callBack: (res: PaginationResultModel<BookEntryModel[]>)=> void) {
     model.companyId = this._loginResponse.getLoginResponseModel().company.companyId;
+    model.year = this._loginResponse.getLoginResponseModel().year;
     this._http.post<PaginationResultModel<BookEntryModel[]>>("BookEntries/GetAllBookEntry", model, res=> {
       callBack(res);
     });

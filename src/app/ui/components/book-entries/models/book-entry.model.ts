@@ -6,5 +6,4 @@ export class BookEntryModel {
     type: string = "";
     debit: number = 0;
     credit: number = 0;
-    balance: number = 0;
 }
