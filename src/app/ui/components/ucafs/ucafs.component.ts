@@ -88,7 +88,7 @@ export class UcafsComponent implements OnInit{
         this.ucafType = "M";
 
         this.getAll();
-        this._toastr.toast(ToastrType.Succes, "Başarılı!",res.message);
+        this._toastr.toast(ToastrType.Success, "Başarılı!",res.message);
       });
     }
   }

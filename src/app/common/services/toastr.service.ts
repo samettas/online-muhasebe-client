@@ -12,7 +12,7 @@ export class ToastrService {
 
   toast(type: ToastrType, message: string, title: string = "" ) {
     switch (type) {
-      case ToastrType.Succes:
+      case ToastrType.Success:
         toastr.success(title, message);
         break;
       case ToastrType.Info:
@@ -32,7 +32,7 @@ export class ToastrService {
 }
 
 export enum ToastrType{
-  Succes,
+  Success,
   Error,
   Info,
   Warning
