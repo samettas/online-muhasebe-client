@@ -15,6 +15,8 @@ import { LoadingButtonComponent } from 'src/app/common/components/loading-button
 import { CreateBookEntryModel } from './models/create-book-entry.model';
 import { ToastrService, ToastrType } from 'src/app/common/services/toastr.service';
 import { LoginResponseService } from 'src/app/common/services/login-response.service';
+import { SwalService } from 'src/app/common/services/swal.service';
+import { RemoveByIdModel } from 'src/app/common/models/remove-by-id.model';
 
 @Component({
   selector: 'app-book-entries',
@@ -55,7 +57,8 @@ export class BookEntriesComponent implements OnInit {
     private _bookEntry: BookEntryService,
     private _date: DatePipe,
     private _toastr: ToastrService,
-    private _loginResponse: LoginResponseService
+    private _loginResponse: LoginResponseService,
+    private _swal: SwalService
   ){
     this.dateInput = _date.transform(new Date(),"yyyy-MM-dd");
   }
@@ -109,6 +112,18 @@ export class BookEntriesComponent implements OnInit {
       return "text-danger";
 
       return ""
+  }
+
+  removeById(bookEntry: BookEntryModel) {
+    this._swal.callSwal("Sil", "Yevmiye Fişini Sil ?", `${bookEntry.bookEntryNumber} numaralı yevmiye fişini silmek istiyor musunuz ?`, ()=> {
+      let model: RemoveByIdModel = new RemoveByIdModel();
+      model.id = bookEntry.id;
+
+      this._bookEntry.removeById(model, res=> {
+        this._toastr.toast(ToastrType.Info, res.message,"");
+        this.getAll(this.pageNumber);
+      });
+    });
   }
 
   exportExcel() {

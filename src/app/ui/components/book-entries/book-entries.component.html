@@ -21,6 +21,7 @@
                         <th>Tarih</th>
                         <th>Yevmiye Fişi Numarası</th>
                         <th>Tip</th>
+                        <th>Açıklama</th>
                         <th>Borç</th>
                         <th>Alacak</th>
                         <th>Bakiye</th>
@@ -34,6 +35,7 @@
                         <td [innerText]="bookEntry.date | date : 'dd.MM.yyyy'"></td>
                         <td [innerText]="bookEntry.bookEntryNumber"></td>
                         <td [innerText]="bookEntry.type"></td>
+                        <td [innerText]="bookEntry.description"></td>
                         <td [innerText]="bookEntry.debit | trCurrency"></td>
                         <td [innerText]="bookEntry.credit | trCurrency"></td>
                         <td [innerText]="(bookEntry.debit - bookEntry.credit) | trCurrency"></td>
@@ -42,7 +44,7 @@
                                 <button class="btn btn-outline-warning btn-sm" title="Güncelle">
                                     <i class="fa fa-edit"></i>
                                 </button>
-                                <button class="btn btn-outline-danger btn-sm mx-1" title="Sil">
+                                <button (click)="removeById(bookEntry)" class="btn btn-outline-danger btn-sm mx-1" title="Sil">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
