@@ -30,6 +30,10 @@ bootstrapApplication(AppComponent,{
               loadComponent: ()=> import("./app/ui/components/ucafs/ucafs.component").then(c=> c.UcafsComponent)
             },
             {
+              path:"book-entries",
+              loadComponent: ()=> import("./app/ui/components/book-entries/book-entries.component").then(c=>c.BookEntriesComponent)
+            },
+            {
               path:"reports",
               loadComponent: ()=> import("./app/ui/components/reports/reports.component").then(c=>c.ReportsComponent)
             },

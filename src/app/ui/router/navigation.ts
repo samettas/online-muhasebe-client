@@ -16,6 +16,11 @@ export const Navigations: Navigation[] = [
         icon: "fa fa-file-signature"
     },
     {
+        routerLink: "/book-entries",
+        name: "Yevmiye Fişleri",
+        icon: "fa fa-book-open"
+    },
+    {
         routerLink: "/reports",
         name: "Raporlar",
         icon: "fa fa-chart-pie"
