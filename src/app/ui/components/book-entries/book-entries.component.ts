@@ -51,6 +51,7 @@ export class BookEntriesComponent implements OnInit {
   pageNumbers: number[] = [];
   dateInput: string = "";
   typeSelect: string = "Muavin";
+  updateModel: BookEntryModel = new BookEntryModel();
   result: PaginationResultModel<BookEntryModel[]> = new PaginationResultModel<BookEntryModel[]>();
 
   constructor(
@@ -102,6 +103,28 @@ export class BookEntriesComponent implements OnInit {
         this.typeSelect = "Muavin";
         this.getAll();
         let element = document.getElementById("createModalCloseBtn");
+        element.click();
+      });
+    }
+  }
+
+  getUpdateModel(model: BookEntryModel) {
+    this.updateModel = {...model};
+    this.updateModel.date = this._date.transform(model.date, 'yyyy-MM-dd');
+  }
+
+  update(form: NgForm) {
+    if(form.valid){
+      let year = this.updateModel.date.split("-")[0];
+      if(this._loginResponse.getLoginResponseModel().year != +year) {
+        this._toastr.toast(ToastrType.Error, "Sadece mevcut yıla işlem yapılabilir!");
+        return;
+      }
+
+      this._bookEntry.update(this.updateModel, (res)=> {
+        this._toastr.toast(ToastrType.Warning, res.message, "");
+        this.getAll();
+        let element = document.getElementById("updateModalCloseBtn");
         element.click();
       });
     }

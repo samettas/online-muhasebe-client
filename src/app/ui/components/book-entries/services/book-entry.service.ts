@@ -33,6 +33,14 @@ export class BookEntryService {
     });
   }
 
+  update(model: BookEntryModel, callBack: (res: MessageResponseModel)=> void) {
+    model.companyId = this._loginResponse.getLoginResponseModel().company.companyId;
+    this._http.post<MessageResponseModel>("BookEntries/Update", model, res=> {
+      callBack(res);
+    });
+  }
+
+
   removeById(model: RemoveByIdModel, callBack: (res: MessageResponseModel)=> void) {
     model.companyId = this._loginResponse.getLoginResponseModel().company.companyId;
     this._http.post<MessageResponseModel>("BookEntries/RemoveById", model, res=> {
